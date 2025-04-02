@@ -63,6 +63,29 @@ $lolbins = @(
     "net.exe",                 # Net user/ group manipulation
     "sc.exe",                  # Service creation for persistence
     "whoami.exe",              # Privilege recon
+    "Runscripthelper.exe",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+
     "nltest.exe"               # Domain recon
 )
 
