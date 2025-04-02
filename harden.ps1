@@ -1,6 +1,6 @@
 # Windows 10/11 Enhanced Hardening Script
 # Run as Administrator
-
+Warn-IfWindows10EOL
 # ---- System Info ----
 Write-Output "Running Windows Hardening Script..."
 $OSVersion = (Get-CimInstance Win32_OperatingSystem).Caption
@@ -97,6 +97,18 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies
 
 # Optional: block powershell_ise.exe too
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\DisallowRun" -Name "2" -Value "powershell_ise.exe"
+
+function Warn-IfWindows10EOL {
+    $osCaption = (Get-CimInstance Win32_OperatingSystem).Caption
+    if ($osCaption -like "*Windows 10*") {
+        Write-Host "`n[!] WARNING: You are using Windows 10, which has reached End of Life (EOL) status." -ForegroundColor Red
+        Write-Host "    ⚠️ It no longer receives security updates from Microsoft." -ForegroundColor Yellow
+        Write-Host "    🛡️ Please upgrading to Windows 11 asap or a supported OS." -ForegroundColor Yellow
+        Write-Host ""
+        Start-Sleep -Seconds 5
+    }
+}
+
 
 # ---- Defender + Firewall + Audit Policies (unchanged from earlier script, include if needed) ----
 # [You can insert the rest of the previous script here, or ask me to merge everything if needed.]
