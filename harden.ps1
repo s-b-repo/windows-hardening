@@ -83,6 +83,20 @@ foreach ($lolbin in $lolbins) {
         icacls $path /deny Everyone:(X) > $null
     }
 }
+# ---- Block PowerShell from being used in .lnk (shortcut) files ----
+Write-Output "Blocking PowerShell execution from shortcut files (.lnk)..."
+
+# Create new file association override to remove PowerShell from default shell execution
+New-Item -Path "HKCR:\lnkfile\shell\blockpowershell" -Force | Out-Null
+Set-ItemProperty -Path "HKCR:\lnkfile\shell\blockpowershell" -Name "(Default)" -Value "Blocked"
+Set-ItemProperty -Path "HKCR:\lnkfile\shell\blockpowershell\command" -Name "(Default)" -Value "cmd.exe /c echo This shortcut execution is blocked. && pause"
+
+# Prevent PowerShell from auto-launching if embedded in .lnk files
+New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\DisallowRun" -Force | Out-Null
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\DisallowRun" -Name "1" -Value "powershell.exe"
+
+# Optional: block powershell_ise.exe too
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\DisallowRun" -Name "2" -Value "powershell_ise.exe"
 
 # ---- Defender + Firewall + Audit Policies (unchanged from earlier script, include if needed) ----
 # [You can insert the rest of the previous script here, or ask me to merge everything if needed.]
